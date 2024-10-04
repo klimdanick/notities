@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express'
 import notesRoutes from './routes/notesRoutes'
-import createUser from 'database'
+import { createUser } from './database'
 
 const app = express()
 const port = 8081

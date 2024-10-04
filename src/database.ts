@@ -6,7 +6,7 @@ export const createUser = (username: String, password: String) => {
         console.log('Connected to the database.');
     })
     db.serialize(() => {
-        let querry = db.prepare("INSERT INTO user (username, password, salt) VALUES (?, ?, ?);")
+        let querry = db.prepare("INSERT INTO Users (username, password, salt) VALUES (?, ?, ?);")
         querry.run(username, password, 'salt');
     })
 }

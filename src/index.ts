@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express'
 import notesRoutes from './routes/notesRoutes'
-import { createUser } from './database'
+import { addUserToNote, createUser } from './database'
 
 const app = express()
 const port = 8081
@@ -16,3 +16,4 @@ app.listen(port, () => {
 })
 
 createUser("klimdanick", "password")
+addUserToNote("klimdanick", "TEEEEEEST")

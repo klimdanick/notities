@@ -5,7 +5,17 @@ import path from 'path'
 import * as fs from 'fs'
 
 export const getNotes = (req: Request, res: Response) => {
-    res.json({ message: 'All notes' })
+    const id = req.query.id
+    if (id) {
+        const filePath = path.join(__dirname, '../', 'notes', `${id}.json`)
+        const fileContent = fs.readFileSync(filePath)
+        const note: Note = JSON.parse(fileContent.toString())
+
+        res.status(200).json(note)
+        return
+    }
+    //get all allowed notes
+    res.status(200).json({ message: 'All notes' })
 }
 
 export const createNote = (req: Request, res: Response) => {
@@ -23,7 +33,7 @@ export const createNote = (req: Request, res: Response) => {
 
     const filePath = path.join(__dirname, '../', 'notes', `${id}.json`)
 
-    fs.writeFile(filePath, JSON.stringify(req.body.content, null, 2), (err) => {
+    fs.writeFile(filePath, JSON.stringify(note, null, 2), (err) => {
         if (err) {
             return res.status(500).json({ error: 'Failed to write to file' })
         }
@@ -36,5 +46,13 @@ export const updateNote = (req: Request, res: Response) => {
 }
 
 export const deleteNote = (req: Request, res: Response) => {
+    const id = req.params.id
+    if (!id) {
+        res.status(400).send('Not a vallid id')
+    }
+
+    // check if user may acces this file
+    const filePath = path.join(__dirname, '../', 'notes', `${id}.json`)
+    fs.unlinkSync(filePath)
     res.json({ message: `Note ${req.params.id} deleted` })
 }

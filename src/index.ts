@@ -14,6 +14,3 @@ app.use('/api', notesRoutes)
 app.listen(port, () => {
   console.log(`Server running on port ${port}`)
 })
-
-createUser("klimdanick", "password")
-addUserToNote("klimdanick", "TEEEEEEST")

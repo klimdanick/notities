@@ -1,1 +1,3 @@
-echo "notities test"
+npm i
+npm run build
+npm start

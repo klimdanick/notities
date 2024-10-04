@@ -44,7 +44,9 @@
         "sqlite3": "^5.1.7"
     },
     "husky": {
-        "hooks": {}
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
     },
     "lint-staged": {
         "*.{js,jsx,ts,tsx,json,css,scss,md}": [

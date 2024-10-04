@@ -3,7 +3,7 @@ import notesRoutes from './routes/notesRoutes'
 import database from 'database'
 
 const app = express()
-const port = 8080
+const port = 8081
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello, TypeScript with Express!')

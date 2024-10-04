@@ -28,7 +28,7 @@ export const NotesFromUser = (username: string) => {
         if (err) console.error(err.message)
     })
     db.serialize(() => {
-        let querry = db.prepare('SELECT uuid FROM UserNote WHERE username = "?"')
+        let querry = db.prepare('SELECT uuid FROM UserNote WHERE username = "?";')
         querry.each(username, (err, row: any) => {
             notes.push(row.uuid)
         })
@@ -43,7 +43,7 @@ export const UserHasNoteAccess = (username: string, uuid: string) => {
         if (err) console.error(err.message)
     })
     db.serialize(() => {
-        let querry = db.prepare('SELECT uuid FROM UserNote WHERE username = "?"')
+        let querry = db.prepare('SELECT uuid FROM UserNote WHERE username = "?";')
         querry.each(username, (err, row: any) => {
             if (row.uuid == uuid) access = true
         })

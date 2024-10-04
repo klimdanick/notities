@@ -15,5 +15,11 @@
   "bugs": {
     "url": "https://github.com/klimdanick/notities/issues"
   },
-  "homepage": "https://github.com/klimdanick/notities#readme"
+  "homepage": "https://github.com/klimdanick/notities#readme",
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.7.4",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.6.2"
+  }
 }

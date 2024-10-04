@@ -51,6 +51,7 @@
         "src/**/*.{jsx,ts,tsx,json}": [
             "prettier --write",
             "eslint --fix"
-        ]
+        ],
+        "!node_modules/**/*": []
     }
 }

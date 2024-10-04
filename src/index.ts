@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express'
 import notesRoutes from './routes/notesRoutes'
-import database from 'database'
+import createUser from 'database'
 
 const app = express()
 const port = 8081
@@ -15,4 +15,4 @@ app.listen(port, () => {
   console.log(`Server running on port ${port}`)
 })
 
-database.createUser("klimdanick", "password")
+createUser("klimdanick", "password")

@@ -1,39 +1,56 @@
 {
-  "name": "notities",
-  "version": "1.0.0",
-  "description": "notes backend",
-  "main": "src/index.ts",
-  "scripts": {
-    "test": "test",
-    "build": "tsc",
-    "start": "node out/index.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/klimdanick/notities.git"
-  },
-  "author": "klimdanick",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/klimdanick/notities/issues"
-  },
-  "homepage": "https://github.com/klimdanick/notities#readme",
-  "devDependencies": {
-    "@eslint/js": "^9.11.1",
-    "@types/express": "^5.0.0",
-    "@types/node": "^22.7.4",
-    "@typescript-eslint/eslint-plugin": "^8.8.0",
-    "@typescript-eslint/parser": "^8.8.0",
-    "eslint": "^9.11.1",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-prettier": "^5.2.1",
-    "globals": "^15.10.0",
-    "prettier": "^3.3.3",
-    "ts-node-dev": "^2.0.0",
-    "typescript": "^5.6.2",
-    "typescript-eslint": "^8.8.0"
-  },
-  "dependencies": {
-    "express": "^4.21.0"
-  }
+    "name": "notities",
+    "version": "1.0.0",
+    "description": "notes backend",
+    "main": "src/index.ts",
+    "scripts": {
+        "test": "test",
+        "build": "tsc",
+        "start": "node out/index.js",
+        "dev": "nodemon src/index.ts",
+        "prepare": "husky install"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/klimdanick/notities.git"
+    },
+    "author": "klimdanick",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/klimdanick/notities/issues"
+    },
+    "homepage": "https://github.com/klimdanick/notities#readme",
+    "devDependencies": {
+        "@eslint/js": "^9.11.1",
+        "@types/express": "^5.0.0",
+        "@types/node": "^22.7.4",
+        "@typescript-eslint/eslint-plugin": "^8.8.0",
+        "@typescript-eslint/parser": "^8.8.0",
+        "eslint": "^9.11.1",
+        "eslint-config-prettier": "^9.1.0",
+        "eslint-plugin-prettier": "^5.2.1",
+        "globals": "^15.10.0",
+        "husky": "^8.0.0",
+        "lint-staged": "^15.2.10",
+        "nodemon": "^3.1.7",
+        "prettier": "^3.3.3",
+        "ts-node": "^10.9.2",
+        "ts-node-dev": "^2.0.0",
+        "typescript": "^5.6.2",
+        "typescript-eslint": "^8.8.0"
+    },
+    "dependencies": {
+        "express": "^4.21.0"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
+    },
+    "lint-staged": {
+        "*.{js,jsx,ts,tsx,json,css,scss,md}": [
+            "prettier --write",
+            "eslint --fix"
+        ]
+    }
 }

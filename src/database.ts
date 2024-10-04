@@ -1,0 +1,7 @@
+import sqlite3 from 'sqlite3'
+
+let db = new sqlite3.Database(':main:');
+
+export const createUser = (username: String, password: String) => {
+    console.log(username);
+}

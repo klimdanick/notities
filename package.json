@@ -1,0 +1,19 @@
+{
+  "name": "notities",
+  "version": "1.0.0",
+  "description": "notes backend",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/klimdanick/notities.git"
+  },
+  "author": "klimdanick",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/klimdanick/notities/issues"
+  },
+  "homepage": "https://github.com/klimdanick/notities#readme"
+}

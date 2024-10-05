@@ -7,8 +7,7 @@
         "test": "test",
         "build": "tsc",
         "start": "node out/index.js",
-        "dev": "nodemon src/index.ts",
-        "prepare": "husky install"
+        "dev": "nodemon src/index.ts"
     },
     "repository": {
         "type": "git",
@@ -41,6 +40,7 @@
     },
     "dependencies": {
         "express": "^4.21.0",
+        "sqlite": "^5.1.1",
         "sqlite3": "^5.1.7"
     },
     "husky": {

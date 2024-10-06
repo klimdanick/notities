@@ -1,11 +1,16 @@
+import { createHash } from 'node:crypto';
 import sqlite from 'node:sqlite'
 
 export function createUser(username: string, password: string) {
     const db = new sqlite.DatabaseSync("notes.db");
 
     try {
+        const md5hash = createHash('md5')
+        const salt = md5hash.update(new Date().toISOString()).digest('hex')
+        password = hashPassword(password, salt)
+
         const query = db.prepare("INSERT INTO users (username, password, salt) VALUES (?, ?, ?)")
-        query.run(username, password, "salt")
+        query.run(username, password, salt)
     } catch (err: any) {
         return err
     }
@@ -60,4 +65,37 @@ export function usersFromNote(uuid: string) {
 
     db.close()
     return results
+}
+
+export function isPasswordValid(username: string, password: string, callback?: (err: Error) => void) {
+    const db = new sqlite.DatabaseSync("notes.db");
+    let results: any[] = []
+    try {
+        const query = db.prepare("SELECT salt, password from users where username = ?")
+        results = query.all(username)
+    } catch (err: any) {
+        if (!callback) console.log(err)
+        else callback(err);
+        return false
+    }
+    if (results.length <= 0) {
+        if (callback) callback(new Error("User not found!"))
+        return false
+    }
+
+    const salt = results[0].salt
+    const databasePassword = results[0].password
+    password = hashPassword(password, salt)
+    return databasePassword == password
+}
+
+function hashPassword(password: string, salt: string) {
+    const hash = (password: string) => {
+        const sha256hash = createHash('sha256')
+        return sha256hash.update(password).digest('hex')
+    }
+
+    password = hash(password)
+    password = hash(password + salt)
+    return password
 }

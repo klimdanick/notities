@@ -7,7 +7,7 @@
         "test": "test",
         "build": "tsc",
         "start": "node --experimental-sqlite out/index.js",
-        "dev": "nodemon src/index.ts"
+        "dev": "nodemon --exec node --experimental-sqlite -r ts-node/register src/index.ts"
     },
     "repository": {
         "type": "git",

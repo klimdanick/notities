@@ -6,7 +6,7 @@
     "scripts": {
         "test": "test",
         "build": "tsc",
-        "start": "node out/index.js",
+        "start": "node --experimental-sqlite out/index.js",
         "dev": "nodemon src/index.ts"
     },
     "repository": {

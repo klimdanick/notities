@@ -1,5 +1,8 @@
 import { createHash } from 'node:crypto';
 import sqlite from 'node:sqlite'
+import * as fs from 'fs'
+import path from 'path'
+
 
 export function createUser(username: string, password: string) {
     const db = new sqlite.DatabaseSync("notes.db");
@@ -98,4 +101,32 @@ function hashPassword(password: string, salt: string) {
     password = hash(password)
     password = hash(password + salt)
     return password
+}
+
+export function purgeDb(){
+    const db = new sqlite.DatabaseSync("notes.db");
+    let results: any[] = []
+
+    try {
+        const query = db.prepare("SELECT UUID FROM usernote")
+        results = query.all()
+        results = results.map(result => result.UUID)
+        console.log("Purging database...")
+        let purgeAmount = 0
+        for (const file of results) {
+            const filePath = path.join(__dirname, '../', 'notes/',`${file}.json`)
+            if (!fs.existsSync(filePath)) {
+                console.log(`Deleting file: "${file}" from db`)
+                const query = db.prepare("DELETE FROM usernote WHERE UUID = ?")
+                query.run(file)
+                purgeAmount++
+            }
+        }
+        console.log(`Purged ${purgeAmount} files!`)
+    } catch (err: any) {
+        return err
+    }
+
+    db.close()
+
 }

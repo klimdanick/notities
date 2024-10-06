@@ -46,9 +46,11 @@ export const getNote = (req: Request, res: Response) => {
 export const createNote = (req: Request, res: Response) => {
     if (!req.body.title) {
         res.status(400).send('Enter a title!')
+        return
     }
     if (!req.body.username){
         res.status(400).send('Enter a username!')
+        return
     }
 
     const id = uuidv4()

@@ -6,6 +6,7 @@ const app = express()
 const port = 8080
 
 app.post('*', bodyParser.json())
+app.delete('*', bodyParser.json())
 app.get('/', (req: Request, res: Response) => {
     res.send('Hello, TypeScript with Express!')
 })

@@ -34,7 +34,7 @@ export function hasNoteAccess(username: string, uuid: string) {
 
 export function notesFromUser(username: string) {
     const db = new sqlite.DatabaseSync("notes.db");
-    let results: any[] | null = []
+    let results: any[] = []
     try {
         const query = db.prepare("SELECT UUID from usernote where username = ?")
         results = query.all(username)

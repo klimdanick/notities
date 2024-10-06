@@ -3,21 +3,32 @@ import { v4 as uuidv4 } from 'uuid'
 import { Note } from './types'
 import path from 'path'
 import * as fs from 'fs'
+import { notesFromUser } from './database'
 
 export const getNotes = (req: Request, res: Response) => {
-    const id = req.query.id
-    if (id) {
+    if (!req.query.username) {
+        res.status(400).json({ error: 'No username provided' })
+        return
+    }
+    const username = req.query.username as string
+
+    const allowedNoteIds = notesFromUser(username)
+    if (!allowedNoteIds) {
+        res.status(404).json({ error: 'No notes found' })
+        return
+    }
+    let notes = [] 
+    for (const id of allowedNoteIds) {
         const filePath = path.join(__dirname, '../', 'notes', `${id}.json`)
         const fileContent = fs.readFileSync(filePath)
         const note: Note = JSON.parse(fileContent.toString())
-
-        res.status(200).json(note)
-        return
+        notes.push(note)
     }
-    //get all allowed notes
-    res.status(200).json({ message: 'All notes' })
+    res.status(200).json(notes)    
 }
-
+export const getNote = (req: Request, res: Response) => {
+    res.json({ message: `Note ${req.params.id}` })
+}   
 export const createNote = (req: Request, res: Response) => {
     const id = uuidv4()
     if (!req.body.title) {

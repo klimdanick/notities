@@ -3,9 +3,10 @@ import notesRoutes from './routes/notesRoutes'
 import bodyParser from 'body-parser'
 
 const app = express()
-const port = 8081
+const port = 8080
 
-app.use(bodyParser.json())
+app.post('*', bodyParser.json())
+app.delete('*', bodyParser.json())
 app.get('/', (req: Request, res: Response) => {
     res.send('Hello, TypeScript with Express!')
 })

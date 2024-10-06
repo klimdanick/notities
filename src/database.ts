@@ -34,6 +34,8 @@ export function addUserToNode(username: string, uuid: string) {
 
 export function hasNoteAccess(username: string, uuid: string) {
     const notes = notesFromUser(username)
+    console.log(notes)
+    console.log(uuid)
     return notes.includes(uuid)
 }
 

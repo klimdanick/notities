@@ -103,13 +103,13 @@ export const updateNote = (req: Request, res: Response) => {
 
 
 export const deleteNote = (req: Request, res: Response) => {
-    console.log(req.body)
     if (!req.body.username || !req.body.id) {
         res.status(400).json({ error: 'No username provided' })
         return
     }
     const username = req.body.username
     const id = req.body.id
+    
     if (!hasNoteAccess(username, id)) {
         res.status(403).json({ error: 'You do not have access to this note' })
         return

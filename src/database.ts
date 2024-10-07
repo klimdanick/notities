@@ -103,7 +103,17 @@ function hashPassword(password: string, salt: string) {
     return password
 }
 
-export function purgeDb(){
+export function deleteNoteFromDB(uuid: string) {
+    const db = new sqlite.DatabaseSync("notes.db");
+    try {
+        const query = db.prepare("DELETE FROM usernote WHERE UUID = ?")
+        query.run(uuid)
+    } catch (err) {
+        return err
+    }
+}
+
+export function purgeDb() {
     const db = new sqlite.DatabaseSync("notes.db");
     let results: any[] = []
 
@@ -114,11 +124,10 @@ export function purgeDb(){
         console.log("Purging database...")
         let purgeAmount = 0
         for (const file of results) {
-            const filePath = path.join(__dirname, '../', 'notes/',`${file}.json`)
+            const filePath = path.join(__dirname, '../', 'notes/', `${file}.json`)
             if (!fs.existsSync(filePath)) {
                 console.log(`Deleting file: "${file}" from db`)
-                const query = db.prepare("DELETE FROM usernote WHERE UUID = ?")
-                query.run(file)
+                deleteNoteFromDB(file)
                 purgeAmount++
             }
         }

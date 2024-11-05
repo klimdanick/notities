@@ -20,6 +20,7 @@
     },
     "homepage": "https://github.com/klimdanick/notities#readme",
     "devDependencies": {
+        "@types/cors": "^2.8.17",
         "@types/express": "^5.0.0",
         "@types/node": "^22.7.4",
         "@types/uuid": "^10.0.0",
@@ -31,6 +32,7 @@
         "uuid": "^10.0.0"
     },
     "dependencies": {
+        "cors": "^2.8.5",
         "express": "^4.21.0",
         "sqlite3": "^5.1.7"
     }

@@ -2,10 +2,12 @@ import express, { Request, Response } from 'express'
 import notesRoutes from './routes/notesRoutes'
 import bodyParser from 'body-parser'
 import { purgeDb } from './database'
+import cors from 'cors'
 
 const app = express()
 const port = 8080
 
+app.use(cors());
 app.post('*', bodyParser.json())
 app.delete('*', bodyParser.json())
 app.use('/api', notesRoutes)
@@ -15,5 +17,5 @@ purgeDb()
 
 
 app.listen(port, () => {
-    console.log(`Server running on port ${port}`)
+	console.log(`Server running on port ${port}`)
 })

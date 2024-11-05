@@ -22,6 +22,10 @@ app.use((req, res, next) => {
   }
 });
 
+app.post('*', bodyParser.json())
+app.delete('*', bodyParser.json())
+app.use('/api', notesRoutes)
+
 // Make sure all file names in db are accesable in the filesystem
 purgeDb();
 

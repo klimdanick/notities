@@ -58,7 +58,7 @@ export const createNote = (req: Request, res: Response) => {
     const note: Note = {
         id: id,
         title: req.body.title,
-        content: {},
+        content: "",
         created_at: new Date().toISOString(),
     }
 

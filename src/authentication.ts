@@ -21,3 +21,18 @@ export const checkToken: any = (req: Request, res: Response, next: NextFunction)
         next();
     }
 }
+
+export const login = (req: Request, res: Response) => {
+    let username = req.body.username;
+    let password = req.body.password;
+    if (!username) {
+        res.status(400).send('Enter a username!')
+        return
+    }
+    if (!password) {
+        res.status(400).send('Enter a password!')
+        return
+    }
+
+
+}

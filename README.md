@@ -17,7 +17,7 @@ Start the app in the `dev` environment:
 npm run dev
 ```
 
-To get the apispec:
+### To get the apispec localy
 
 ```bash
 npm run apispec
@@ -25,6 +25,10 @@ npm run dev
 ```
 
 And navigate to `localhost:8080/api-docs`
+
+### Public api spec
+
+available on `http://vps.klimdanick.nl:8080/api-docs`
 
 ## Packaging for Production
 

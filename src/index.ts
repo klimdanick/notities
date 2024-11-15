@@ -9,7 +9,7 @@ import swaggerUi from "swagger-ui-express";
 import swaggerOutput from "../swagger_output.json";
 
 const app = express();
-const port = 8081;
+const port = 8080;
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");

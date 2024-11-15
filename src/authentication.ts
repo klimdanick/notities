@@ -1,5 +1,7 @@
 import { NextFunction, RequestHandler, Request, Response } from "express";
 import cookieParser from "cookie-parser";
+import { doesUsernameExist, isPasswordValid } from "./database";
+import { createHash } from 'node:crypto';
 
 
 const publicEndpoints: string[] = ["/api/login"];
@@ -33,6 +35,18 @@ export const login = (req: Request, res: Response) => {
         res.status(400).send('Enter a password!')
         return
     }
+    if (!doesUsernameExist(username) || !isPasswordValid(username, password)) {
+        res.status(403).send('Username or password incorrect!')
+        return
+    }
+    let token = createToken();
+    res.cookie('token', token, { maxAge: 900000000, httpOnly: false })
+    res.status(200).send("succes");
+}
 
+const createToken = () => {
+    const md5hash = createHash('md5')
+    const token = md5hash.update(Math.random() * Number.MAX_VALUE + "").digest('hex')
 
+    return token
 }

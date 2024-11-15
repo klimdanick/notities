@@ -1,10 +1,13 @@
-import express, { Request, Response } from "express";
+import express, { Request, RequestHandler, Response } from "express";
 import notesRoutes from "./routes/notesRoutes";
 import bodyParser from "body-parser";
 import { purgeDb } from "./database";
+import { checkToken } from "./authentication";
+import { NextFunction } from "express";
+import cookieParser from "cookie-parser";
 
 const app = express();
-const port = 8080;
+const port = 8081;
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -21,10 +24,12 @@ app.use((req, res, next) => {
     next();
   }
 });
+app.use(cookieParser())
+app.use(checkToken);
 
-app.post('*', bodyParser.json())
-app.delete('*', bodyParser.json())
-app.use('/api', notesRoutes)
+app.post('*', bodyParser.json());
+app.delete('*', bodyParser.json());
+app.use('/api', notesRoutes);
 
 // Make sure all file names in db are accesable in the filesystem
 purgeDb();

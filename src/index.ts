@@ -2,6 +2,8 @@ import express, { Request, Response } from "express";
 import notesRoutes from "./routes/notesRoutes";
 import bodyParser from "body-parser";
 import { purgeDb } from "./database";
+import swaggerUi from "swagger-ui-express";
+import swaggerOutput from "../swagger_output.json";
 
 const app = express();
 const port = 8080;
@@ -22,9 +24,11 @@ app.use((req, res, next) => {
   }
 });
 
-app.post('*', bodyParser.json())
-app.delete('*', bodyParser.json())
-app.use('/api', notesRoutes)
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerOutput));
+
+app.post("*", bodyParser.json());
+app.delete("*", bodyParser.json());
+app.use("/api", notesRoutes);
 
 // Make sure all file names in db are accesable in the filesystem
 purgeDb();

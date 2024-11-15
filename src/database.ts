@@ -70,6 +70,23 @@ export function usersFromNote(uuid: string) {
     return results
 }
 
+export function doesUsernameExist(username: string, callback?: (err: Error) => void) {
+    const db = new sqlite.DatabaseSync("notes.db");
+    let results: any[] = []
+    try {
+        const query = db.prepare("SELECT username from users where username = ?")
+        results = query.all(username)
+    } catch (err: any) {
+        if (!callback) console.log(err)
+        else callback(err);
+        return false
+    }
+    if (results.length <= 0) {
+        return false
+    }
+    return true;
+}
+
 export function isPasswordValid(username: string, password: string, callback?: (err: Error) => void) {
     const db = new sqlite.DatabaseSync("notes.db");
     let results: any[] = []

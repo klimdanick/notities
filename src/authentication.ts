@@ -1,32 +1,31 @@
 import { NextFunction, RequestHandler, Request, Response } from "express";
 import cookieParser from "cookie-parser";
-import { doesUsernameExist, isPasswordValid } from "./database";
+import { addTokenToDB, doesUsernameExist, isPasswordValid } from "./database";
 import { createHash } from 'node:crypto';
+import { Token } from "./types";
 
 
 const publicEndpoints: string[] = ["/api/login"];
 
 export const checkToken: any = (req: Request, res: Response, next: NextFunction): void => {
     if (publicEndpoints.includes(req.url)) return next();
-    console.log(req.url);
 
     let token: string | undefined = req.cookies?.token;
     if (!token) {
-        res.status(401).send("provide a token to access this endpoint! you can aquire one on /login");
+        res.status(401).send("provide a token to access this endpoint! you can aquire one at /login");
         return;
     } else {
-        /*
-
-            CHECK TOKEN!
-
-        */
-        next();
+        if (checkToken(token))
+            next();
+        else
+            res.status(403).send("invalid token! you can aquire one at /login");
     }
 }
 
 export const login = (req: Request, res: Response) => {
-    let username = req.body.username;
-    let password = req.body.password;
+    const username = req.body.username;
+    const password = req.body.password;
+
     if (!username) {
         res.status(400).send('Enter a username!')
         return
@@ -39,14 +38,21 @@ export const login = (req: Request, res: Response) => {
         res.status(403).send('Username or password incorrect!')
         return
     }
-    let token = createToken();
-    res.cookie('token', token, { maxAge: 900000000, httpOnly: false })
+    const token: Token = createToken(username);
+    res.cookie('token', token.token, { expires: token.expiration, httpOnly: false })
     res.status(200).send("succes");
 }
 
-const createToken = () => {
+const createToken = (username: string): Token => {
+
+    let token: Token = { token: "", expiration: new Date(), username: username }
+
     const md5hash = createHash('md5')
-    const token = md5hash.update(Math.random() * Number.MAX_VALUE + "").digest('hex')
+    token.token = md5hash.update(Math.random() * Number.MAX_VALUE + "").digest('hex')
+
+    token.expiration.setMonth(token.expiration.getMonth() + 1)
+
+    addTokenToDB(token)
 
     return token
 }

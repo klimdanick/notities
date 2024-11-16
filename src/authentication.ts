@@ -5,7 +5,7 @@ import { createHash } from 'node:crypto';
 import { Token } from "./types";
 
 
-const publicEndpoints: string[] = ["/api/login"];
+const publicEndpoints: string[] = ["/api/login", "/api/createUser"];
 
 export const checkToken: any = (req: Request, res: Response, next: NextFunction): void => {
     if (publicEndpoints.includes(req.url)) return next();

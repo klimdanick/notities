@@ -8,7 +8,7 @@ import { Token } from './types';
 const db = new sqlite.DatabaseSync("notes.db");
 db.close(); // close becouse a function can not open it when it is already open
 
-export function createUser(username: string, password: string) {
+export function addUserToDB(username: string, password: string) {
     db.open();
 
     try {

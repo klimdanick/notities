@@ -6,7 +6,7 @@
     "scripts": {
         "test": "test",
         "build": "tsc",
-        "start": "node --experimental-sqlite out/index.js",
+        "start": "node --experimental-sqlite out/src/index.js",
         "dev": "nodemon --exec node --experimental-sqlite -r ts-node/register src/index.ts",
         "apispec": "node -r ts-node/register ./swagger.ts"
     },

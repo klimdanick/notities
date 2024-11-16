@@ -183,8 +183,9 @@ export function addTokenToDB(token: Token) {
     db.close()
 }
 
-export function checkToken(token: string, callback?: (err: Error) => void): string | boolean {
+export function isTokenValid(token: string, callback?: (err: Error) => void): string | boolean {
     db.open();
+
     let results: any[] = []
     try {
         const query = db.prepare("SELECT expiration, username from tokens where token = ?")
@@ -201,9 +202,11 @@ export function checkToken(token: string, callback?: (err: Error) => void): stri
         return false
     }
     db.close();
+
+
     const expiration = new Date(results[0].expiration)
     const username = results[0].username
-    if (expiration <= new Date())
+    if (expiration >= new Date())
         return username
     else
         return false

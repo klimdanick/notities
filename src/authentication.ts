@@ -1,6 +1,6 @@
 import { NextFunction, RequestHandler, Request, Response } from "express";
 import cookieParser from "cookie-parser";
-import { addTokenToDB, doesUsernameExist, isPasswordValid } from "./database";
+import { addTokenToDB, doesUsernameExist, isPasswordValid, isTokenValid } from "./database";
 import { createHash } from 'node:crypto';
 import { Token } from "./types";
 
@@ -9,13 +9,13 @@ const publicEndpoints: string[] = ["/api/login"];
 
 export const checkToken: any = (req: Request, res: Response, next: NextFunction): void => {
     if (publicEndpoints.includes(req.url)) return next();
-
-    let token: string | undefined = req.cookies?.token;
+    console.log({ "cookies": req.cookies });
+    let token: string = req.cookies.token;
     if (!token) {
         res.status(401).send("provide a token to access this endpoint! you can aquire one at /login");
         return;
     } else {
-        if (checkToken(token))
+        if (isTokenValid(token))
             next();
         else
             res.status(403).send("invalid token! you can aquire one at /login");

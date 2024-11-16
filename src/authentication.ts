@@ -1,6 +1,6 @@
 import { NextFunction, RequestHandler, Request, Response } from "express";
 import cookieParser from "cookie-parser";
-import { addTokenToDB, doesUsernameExist, isPasswordValid, isTokenValid } from "./database";
+import { addTokenToDB, addUserToDB, doesUsernameExist, isPasswordValid, isTokenValid } from "./database";
 import { createHash } from 'node:crypto';
 import { Token } from "./types";
 
@@ -61,7 +61,7 @@ export const createUser = (req: Request, res: Response) => {
         return
     }
 
-    createUser(username, password);
+    addUserToDB(username, password);
 
     const token: Token = createToken(username);
     res.cookie('token', token.token, { expires: token.expiration, httpOnly: false })

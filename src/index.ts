@@ -36,7 +36,7 @@ app.post("*", bodyParser.json());
 app.delete("*", bodyParser.json());
 app.use("/api", notesRoutes);
 // Make sure all file names in db are accesable in the filesystem
-purgeDb();
+console.log(purgeDb());
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);

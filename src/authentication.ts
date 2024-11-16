@@ -44,6 +44,30 @@ export const login = (req: Request, res: Response) => {
     res.status(200).json(token);
 }
 
+export const createUser = (req: Request, res: Response) => {
+    const username = req.body.username;
+    const password = req.body.password;
+
+    if (!username) {
+        res.status(400).send('Enter a username!')
+        return
+    }
+    if (!password) {
+        res.status(400).send('Enter a password!')
+        return
+    }
+    if (doesUsernameExist(username)) {
+        res.status(400).send('Username already in use!')
+        return
+    }
+
+    createUser(username, password);
+
+    const token: Token = createToken(username);
+    res.cookie('token', token.token, { expires: token.expiration, httpOnly: false })
+    res.status(200).json(token);
+}
+
 const createToken = (username: string): Token => {
 
     let token: Token = { token: "", expiration: new Date(), username: username }

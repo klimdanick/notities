@@ -164,6 +164,7 @@ export function purgeDb() {
         }
         console.log(`Purged ${purgeAmount} files!`)
     } catch (err: any) {
+        db.close()
         return err
     }
 

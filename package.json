@@ -21,6 +21,7 @@
     },
     "homepage": "https://github.com/klimdanick/notities#readme",
     "devDependencies": {
+        "@types/cookie-parser": "^1.4.7",
         "@types/cors": "^2.8.17",
         "@types/express": "^5.0.0",
         "@types/node": "^22.7.4",
@@ -35,6 +36,7 @@
     "dependencies": {
         "@types/swagger-ui-express": "^4.1.7",
         "and": "^0.0.3",
+        "cookie-parser": "^1.4.7",
         "cors": "^2.8.5",
         "express": "^4.21.1",
         "sqlite3": "^5.1.7",

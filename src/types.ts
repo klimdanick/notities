@@ -5,3 +5,9 @@ export type Note = {
     created_at: string
     updated_at?: string
 }
+
+export type Token = {
+    token: string,
+    expiration: Date,
+    username: string
+}

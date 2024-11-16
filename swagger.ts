@@ -11,6 +11,10 @@ const doc = {
       url: "http://localhost:8080",
       description: "",
     },
+    {
+      url: "http://vps.klimdanick.nl:8080",
+      description: "",
+    },
   ],
   components: {
     securitySchemes: {

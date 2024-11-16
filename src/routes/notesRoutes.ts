@@ -6,6 +6,7 @@ import {
   getNotes,
   updateNote,
 } from "../note_handlers";
+import { login } from "../authentication";
 
 const router = Router();
 
@@ -14,5 +15,6 @@ router.get("/note", getNote);
 router.post("/note", createNote);
 router.delete("/note", deleteNote);
 router.post("/updateNote", updateNote);
+router.post("/login", login);
 
 export default router;

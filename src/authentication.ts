@@ -9,8 +9,9 @@ const publicEndpoints: string[] = ["/api/login"];
 
 export const checkToken: any = (req: Request, res: Response, next: NextFunction): void => {
     if (publicEndpoints.includes(req.url)) return next();
-    console.log({ "cookies": req.cookies });
+
     let token: string = req.cookies.token;
+    if (!token) token = req.headers.token as string;
     if (!token) {
         res.status(401).send("provide a token to access this endpoint! you can aquire one at /login");
         return;
@@ -40,7 +41,7 @@ export const login = (req: Request, res: Response) => {
     }
     const token: Token = createToken(username);
     res.cookie('token', token.token, { expires: token.expiration, httpOnly: false })
-    res.status(200).send("succes");
+    res.status(200).json(token);
 }
 
 const createToken = (username: string): Token => {

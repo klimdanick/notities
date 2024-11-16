@@ -154,6 +154,7 @@ export function purgeDb() {
         results = results.map(result => result.UUID)
         console.log("Purging database...")
         let purgeAmount = 0
+        db.close()
         for (const file of results) {
             const filePath = path.join(__dirname, '../', 'notes/', `${file}.json`)
             if (!fs.existsSync(filePath)) {

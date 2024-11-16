@@ -163,7 +163,7 @@ export function purgeDb() {
                 purgeAmount++
             }
         }
-        console.log(`Purged ${purgeAmount} files!`)
+        return `Purged ${purgeAmount} files!`
     } catch (err: any) {
         return err
     }

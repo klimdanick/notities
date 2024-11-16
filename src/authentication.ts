@@ -39,7 +39,8 @@ export const login = (req: Request, res: Response) => {
         return
     }
     const token: Token = createToken(username);
-    res.status(200).json(token);
+    res.cookie('token', token.token, { expires: token.expiration, httpOnly: false })
+    res.status(200).send("succes");
 }
 
 const createToken = (username: string): Token => {

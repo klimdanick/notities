@@ -6,7 +6,7 @@ import { Token } from './types';
 
 
 const db = new sqlite.DatabaseSync("notes.db");
-db.close();
+db.close(); // close becouse a function can not open it when it is already open
 
 export function createUser(username: string, password: string) {
     db.open();
@@ -88,11 +88,11 @@ export function doesUsernameExist(username: string, callback?: (err: Error) => v
         db.close();
         return false
     }
+    db.close();
+
     if (results.length <= 0) {
-        db.close();
         return false
     }
-    db.close();
     return true;
 }
 
@@ -108,12 +108,13 @@ export function isPasswordValid(username: string, password: string, callback?: (
         db.close();
         return false
     }
+    db.close();
+
     if (results.length <= 0) {
         if (callback) callback(new Error("User not found!"))
-        db.close();
         return false
     }
-    db.close();
+
     const salt = results[0].salt
     const databasePassword = results[0].password
     password = hashPassword(password, salt)
@@ -183,6 +184,7 @@ export function addTokenToDB(token: Token) {
     db.close()
 }
 
+// isTokenValid returns the username when provided token is valid. Otherwise returns false
 export function isTokenValid(token: string, callback?: (err: Error) => void): string | boolean {
     db.open();
 
@@ -196,14 +198,15 @@ export function isTokenValid(token: string, callback?: (err: Error) => void): st
         db.close();
         return false
     }
-    if (results.length <= 0) {
-        if (callback) callback(new Error("Token not found!"))
-        db.close();
-        return false
-    }
     db.close();
 
+    // check if token exists
+    if (results.length <= 0) {
+        if (callback) callback(new Error("Token not found!"))
+        return false
+    }
 
+    // check if token is not expired
     const expiration = new Date(results[0].expiration)
     const username = results[0].username
     if (expiration >= new Date())

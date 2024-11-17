@@ -1,23 +1,22 @@
 import { Request, Response } from 'express'
 import { v4 as uuidv4 } from 'uuid'
-import { Note } from './types'
+import { Note, Token } from './types'
 import path from 'path'
 import * as fs from 'fs'
-import { addUserToNode, deleteNoteFromDB, hasNoteAccess, notesFromUser } from './database'
-
+import { addUserToDB, addUserToNoteInDB, deleteNoteFromDB, getUsernameFromToken, hasNoteAccess, isTokenValid, notesFromUser } from './database'
+import { request } from 'http'
 
 export const getNotes = (req: Request, res: Response) => {
-    if (!req.query.username) {
-        res.status(400).json({ error: 'No username provided' })
-        return
-    }
-    const username = req.query.username as string
-    const allowedNoteIds = notesFromUser(username)
+
+
+    const allowedNoteIds = notesFromUser(req.token.username)
+    console.log(req.token.username);
     let notes = []
 
     for (const id of allowedNoteIds) {
         const filePath = path.join(__dirname, '../', 'notes', `${id}.json`)
         const fileContent = fs.readFileSync(filePath)
+        console.log(fileContent.toString());
         const note: Note = JSON.parse(fileContent.toString())
         notes.push(note)
     }
@@ -26,12 +25,14 @@ export const getNotes = (req: Request, res: Response) => {
 
 
 export const getNote = (req: Request, res: Response) => {
-    if (!req.query.id || !req.query.username) {
-        res.status(400).json({ error: 'No username or id provided' })
+    const username = req.token.username
+    const id = req.query.id as string
+
+    if (!id) {
+        res.status(400).json({ error: 'No id provided' })
         return
     }
-    const id = req.query.id as string
-    const username = req.query.username as string
+
     if (!hasNoteAccess(username, id)) {
         res.status(403).json({ error: 'You do not have access to this note' })
         return
@@ -48,18 +49,15 @@ export const createNote = (req: Request, res: Response) => {
         res.status(400).send('Enter a title!')
         return
     }
-    if (!req.body.username) {
-        res.status(400).send('Enter a username!')
-        return
-    }
 
     const id = uuidv4()
-    const username = req.body.username
+    const username = req.token.username
     const note: Note = {
         id: id,
         title: req.body.title,
         content: "",
         created_at: new Date().toISOString(),
+        users: [username]
     }
 
     const filePath = path.join(__dirname, '../', 'notes', `${id}.json`)
@@ -69,18 +67,20 @@ export const createNote = (req: Request, res: Response) => {
             return res.status(500).json({ error: 'Failed to write to file' })
         }
     })
-    addUserToNode(username, id)
+    addUserToNoteInDB(username, id)
     res.status(200).json({ message: `Note created ${id}`, note: note })
 }
 
 
 export const updateNote = (req: Request, res: Response) => {
-    if (!req.body.username || !req.body.id) {
-        res.status(400).json({ error: 'No username or id provided' })
+    const username = req.token.username
+    const id = req.body.id
+
+    if (!id) {
+        res.status(400).json({ error: 'No id provided' })
         return
     }
-    const username = req.body.username
-    const id = req.body.id
+
     if (!hasNoteAccess(username, id)) {
         res.status(403).json({ error: 'You do not have access to this note' })
         return
@@ -103,12 +103,13 @@ export const updateNote = (req: Request, res: Response) => {
 
 
 export const deleteNote = (req: Request, res: Response) => {
-    if (!req.body.username || !req.body.id) {
-        res.status(400).json({ error: 'No username provided' })
+    const username = req.token.username
+    const id = req.body.id
+
+    if (!id) {
+        res.status(400).json({ error: 'No id provided' })
         return
     }
-    const username = req.body.username
-    const id = req.body.id
 
     if (!hasNoteAccess(username, id)) {
         res.status(403).json({ error: 'You do not have access to this note' })
@@ -120,4 +121,31 @@ export const deleteNote = (req: Request, res: Response) => {
 
     deleteNoteFromDB(id)
     res.status(200).json({ message: `Note ${id} deleted` })
+}
+
+export const addUsersToNote = (req: Request, res: Response) => {
+    const username = req.token.username
+    const id: string = req.body.id
+    const usersToAdd: [string] = req.body.usersToAdd
+
+    if (!id) {
+        res.status(400).json({ error: 'No id provided' })
+        return
+    }
+
+    if (!usersToAdd) {
+        res.status(400).json({ error: 'No user provided' })
+        return
+    }
+
+    if (!hasNoteAccess(username, id)) {
+        res.status(403).json({ error: 'You do not have access to this note' })
+        return
+    }
+
+    for (let i = 0; i < usersToAdd.length; i++)
+        addUserToNoteInDB(usersToAdd[i], id)
+
+    res.status(200).send("succes")
+
 }

@@ -59,12 +59,12 @@ export const createNote = (req: Request, res: Response) => {
     }
 
     const filePath = path.join(__dirname, '../', 'notes', `${id}.json`)
-
-    fs.writeFile(filePath, JSON.stringify(note, null, 2), (err) => {
-        if (err) {
-            return res.status(500).json({ error: 'Failed to write to file' })
-        }
-    })
+    try {
+        fs.writeFileSync(filePath, JSON.stringify(note, null, 2))
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to write to file' })
+        return
+    }
     addUserToNoteInDB(username, id)
     res.status(200).json({ message: `Note created ${id}`, note: note })
 }
@@ -90,12 +90,12 @@ export const updateNote = (req: Request, res: Response) => {
     note.title = req.body.title || note.title
     note.content = req.body.content || note.content
     note.updated_at = new Date().toISOString()
-
-    fs.writeFile(filePath, JSON.stringify(note, null, 2), (err) => {
-        if (err) {
-            return res.status(500).json({ error: 'Failed to write to file' })
-        }
-    })
+    try {
+        fs.writeFileSync(filePath, JSON.stringify(note, null, 2))
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to write to file' })
+        return
+    }
     res.json({ message: `Note ${id} updated` })
 }
 

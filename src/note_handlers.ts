@@ -3,20 +3,18 @@ import { v4 as uuidv4 } from 'uuid'
 import { Note, Token } from './types'
 import path from 'path'
 import * as fs from 'fs'
-import { addUserToDB, addUserToNoteInDB, deleteNoteFromDB, getUsernameFromToken, hasNoteAccess, isTokenValid, notesFromUser } from './database'
+import { addUserToDB, addUserToNoteInDB, deleteNoteFromDB, hasNoteAccess, isTokenValid, notesFromUser } from './database'
 import { request } from 'http'
 
 export const getNotes = (req: Request, res: Response) => {
 
 
     const allowedNoteIds = notesFromUser(req.token.username)
-    console.log(req.token.username);
     let notes = []
 
     for (const id of allowedNoteIds) {
         const filePath = path.join(__dirname, '../', 'notes', `${id}.json`)
         const fileContent = fs.readFileSync(filePath)
-        console.log(fileContent.toString());
         const note: Note = JSON.parse(fileContent.toString())
         notes.push(note)
     }

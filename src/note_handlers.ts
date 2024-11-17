@@ -59,6 +59,8 @@ export const createNote = (req: Request, res: Response) => {
     }
 
     const filePath = path.join(__dirname, '../', 'notes', `${id}.json`)
+    console.log(filePath);
+    console.log(note);
     try {
         fs.writeFileSync(filePath, JSON.stringify(note, null, 2))
     } catch (err) {

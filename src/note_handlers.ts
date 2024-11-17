@@ -143,8 +143,22 @@ export const addUsersToNote = (req: Request, res: Response) => {
         return
     }
 
-    for (let i = 0; i < usersToAdd.length; i++)
+    const filePath = path.join(__dirname, '../', 'notes', `${id}.json`)
+    const fileContent = fs.readFileSync(filePath)
+    const note: Note = JSON.parse(fileContent.toString())
+
+    for (let i = 0; i < usersToAdd.length; i++) {
         addUserToNoteInDB(usersToAdd[i], id)
+        note.users.push(usersToAdd[i])
+    }
+
+    note.updated_at = new Date().toISOString()
+    try {
+        fs.writeFileSync(filePath, JSON.stringify(note, null, 2))
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to write to file' })
+        return
+    }
 
     res.status(200).send("succes")
 

@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  addUsersToNote,
   createNote,
   deleteNote,
   getNote,
@@ -17,5 +18,6 @@ router.delete("/note", deleteNote);
 router.post("/updateNote", updateNote);
 router.post("/login", login);
 router.post("/createUser", createUser);
+router.post("/addUsersToNote", addUsersToNote)
 
 export default router;

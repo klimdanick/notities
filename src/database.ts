@@ -26,8 +26,11 @@ export function addUserToDB(username: string, password: string) {
     db.close()
 }
 
-export function addUserToNode(username: string, uuid: string) {
+export function addUserToNoteInDB(username: string, uuid: string) {
+
+    // only add the user if it does not have access already
     if (hasNoteAccess(username, uuid)) return
+
     db.open();
 
     try {
@@ -154,6 +157,7 @@ export function purgeDb() {
         results = results.map(result => result.UUID)
         console.log("Purging database...")
         let purgeAmount = 0
+        db.close()
         for (const file of results) {
             const filePath = path.join(__dirname, '../', 'notes/', `${file}.json`)
             if (!fs.existsSync(filePath)) {
@@ -162,13 +166,10 @@ export function purgeDb() {
                 purgeAmount++
             }
         }
-        console.log(`Purged ${purgeAmount} files!`)
+        return `Purged ${purgeAmount} files!`
     } catch (err: any) {
-        db.close()
         return err
     }
-
-    db.close()
 
 }
 
@@ -186,7 +187,7 @@ export function addTokenToDB(token: Token) {
 }
 
 // isTokenValid returns the username when provided token is valid. Otherwise returns false
-export function isTokenValid(token: string, callback?: (err: Error) => void): string | boolean {
+export function isTokenValid(token: string, callback?: (err: Error) => void): Token | null {
     db.open();
 
     let results: any[] = []
@@ -197,21 +198,21 @@ export function isTokenValid(token: string, callback?: (err: Error) => void): st
         if (!callback) console.log(err)
         else callback(err);
         db.close();
-        return false
+        return null
     }
     db.close();
 
     // check if token exists
     if (results.length <= 0) {
         if (callback) callback(new Error("Token not found!"))
-        return false
+        return null
     }
 
     // check if token is not expired
     const expiration = new Date(results[0].expiration)
     const username = results[0].username
     if (expiration >= new Date())
-        return username
+        return { token, expiration, username }
     else
-        return false
+        return null
 }

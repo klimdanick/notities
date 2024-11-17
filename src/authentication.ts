@@ -16,9 +16,11 @@ export const checkToken: any = (req: Request, res: Response, next: NextFunction)
         res.status(401).send("provide a token to access this endpoint! you can aquire one at /login");
         return;
     } else {
-        if (isTokenValid(token))
+        const tokenObject: Token | null = isTokenValid(token)
+        if (tokenObject) {
+            req.token = tokenObject
             next();
-        else
+        } else
             res.status(403).send("invalid token! you can aquire one at /login");
     }
 }

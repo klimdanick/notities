@@ -8,22 +8,14 @@ const doc = {
   },
   servers: [
     {
-      url: "http://localhost:8080",
-      description: "",
+      url: "https://vps.klimdanick.nl/notities",
+      description: "production server",
     },
     {
-      url: "http://vps.klimdanick.nl:8080",
-      description: "",
+      url: "http://localhost:8080",
+      description: "development server",
     },
-  ],
-  components: {
-    securitySchemes: {
-      bearerAuth: {
-        type: "http",
-        scheme: "bearer",
-      },
-    },
-  },
+  ]
 };
 
 const outputFile = "./swagger_output.json";

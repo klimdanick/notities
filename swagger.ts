@@ -8,7 +8,7 @@ const doc = {
   },
   servers: [
     {
-      url: "http://vps.klimdanick.nl/notities",
+      url: "https://vps.klimdanick.nl/notities",
       description: "production server",
     },
     {

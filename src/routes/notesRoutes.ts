@@ -8,6 +8,7 @@ import {
   updateNote,
 } from "../note_handlers";
 import { login, createUser } from "../authentication";
+import { getTimers, startTimer } from "../timer_handelers";
 
 const router = Router();
 
@@ -19,5 +20,7 @@ router.post("/updateNote", updateNote);
 router.post("/login", login);
 router.post("/createUser", createUser);
 router.post("/addUsersToNote", addUsersToNote)
+router.get("/getTimers", getTimers)
+router.get("/startTimer", startTimer)
 
 export default router;

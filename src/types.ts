@@ -13,6 +13,12 @@ export type Token = {
     username: string
 }
 
+export type Timer = {
+    duration: number,
+    running: boolean,
+    startTime: Date
+}
+
 declare global {
     namespace Express {
         interface Request {
